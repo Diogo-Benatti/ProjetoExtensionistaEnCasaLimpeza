@@ -1,5 +1,6 @@
 # 📋 Guia de Padrão — EnCasaLimpeza
-> Leia isso ANTES de criar qualquer página. Seguir esse padrão evita conflito no Git e garante que o projeto fique consistente.
+
+> Leia isso ANTES de criar ou editar qualquer arquivo. Seguir esse padrão evita conflito no Git e garante consistência no projeto.
 
 ---
 
@@ -7,58 +8,81 @@
 
 ```
 ProjetoExtensionistaEnCasaLimpeza/
-├── app.py                  ← rotas Flask (NÃO MEXA sem avisar o grupo)
+├── app.py                  ← rotas Flask + lógica (NÃO MEXA sem avisar o grupo)
+├── products.json           ← dados dos produtos do catálogo (editar aqui para mudar produtos)
 ├── templates/
 │   ├── base.html           ← template base (NÃO MEXA)
-│   ├── contato.html        ← exemplo pronto para referência
-│   ├── inicio.html         ← sua página (se você for o responsável)
-│   ├── sobre.html          ← sua página (se você for o responsável)
-│   ├── produtos.html       ← sua página (se você for o responsável)
-│   └── catalogo.html       ← sua página (se você for o responsável)
+│   ├── inicio.html
+│   ├── sobre.html
+│   ├── catalogo.html
+│   └── contato.html        ← use como referência de estrutura
 └── static/
     └── css/
-        └── global.css      ← CSS global (NÃO MEXA sem avisar o grupo)
+        └── global.css          ← CSS global (NÃO MEXA sem avisar o grupo)
 ```
 
 ---
 
 ## ✅ Responsabilidades
 
-| Página         | Arquivo a criar          | Rota no app.py |
-|----------------|--------------------------|----------------|
-| Início         | `templates/inicio.html`  | `/`            |
-| Sobre          | `templates/sobre.html`   | `/sobre`       |
-| Produtos       | `templates/produtos.html`| `/produtos`    |
-| Catálogo       | `templates/catalogo.html`| `/catalogo`    |
+| Página    | Arquivo                  | Rota         | Dupla responsavel  |
+|-----------|--------------------------|--------------|-----------------------|
+| Início    | `templates/inicio.html`  | `/`          | Julia + Camilla       |
+| Sobre     | `templates/sobre.html`   | `/sobre`     | Julia + Camilla       |
+| Catálogo  | `templates/catalogo.html`| `/catalogo`  | Gabriel + Luis        |
+| Contato   | `templates/contato.html` | `/contato`   | Pedro + João         |
 
-> ⚠️ Cada pessoa cria APENAS o arquivo da sua página. Não edite arquivos dos outros.
+> ⚠️ Cada pessoa edita APENAS o arquivo da sua página. Não edite arquivos dos outros sem combinar.
+
+---
+
+## 📦 Como os produtos funcionam
+
+Os produtos ficam em `products.json`, na raiz do projeto. **Não coloque produtos dentro do `app.py` ou do `catalogo.html`.**
+
+Cada produto deve ter esse formato:
+
+```json
+{
+  "name": "Nome do produto",
+  "brand": "Marca",
+  "description": "Descrição breve",
+  "category": "Cozinha"
+}
+```
+
+Categorias válidas:
+- `Limpeza de Pisos`
+- `Banheiro`
+- `Cozinha`
+- `Lavanderia`
+- `Descartáveis`
+- `Equipamentos`
+- `Profissional`
+- `Eco-Friendly`
+
+> ⚠️ O campo `category` deve estar escrito EXATAMENTE igual às opções acima. Maiúsculas e acentos importam.
 
 ---
 
 ## 🚀 Passo a Passo
 
-### 1. Faça o git pull antes de qualquer coisa
+### 1. Atualize o repositório local antes de qualquer coisa
 
 ```bash
 git pull origin main
 ```
 
-> Nunca comece a codar sem atualizar o repositório local.
+> Nunca comece a codar sem atualizar primeiro.
 
 ---
 
-### 2. Crie seu arquivo na pasta `templates/`
-
-O nome do arquivo deve ser exatamente o que está na tabela acima.
-
----
-
-### 3. Comece SEMPRE com essa estrutura base
+### 2. Estrutura base de qualquer página
 
 ```html
 {% extends 'base.html' %}
 
-{% block titulo %}EnCasaLimpeza – NOME DA SUA PÁGINA{% endblock %}
+{% block titulo %}EnCasaLimpeza – NOME DA PÁGINA{% endblock %}
 
 {% block estilos %}
 <style>
@@ -68,17 +92,16 @@ O nome do arquivo deve ser exatamente o que está na tabela acima.
 
 {% block conteudo %}
 
-  <!-- Conteúdo da sua página aqui -->
+  <!-- Conteúdo da página aqui -->
 
 {% endblock %}
 ```
 
-> ⛔ NUNCA coloque `<!DOCTYPE html>`, `<html>`, `<head>`, `<body>`, `<nav>` ou `<footer>` no seu arquivo.
-> O `base.html` já tem tudo isso. Se você repetir, vai quebrar a página.
+> ⛔ NUNCA coloque `<!DOCTYPE html>`, `<html>`, `<head>`, `<body>`, `<nav>` ou `<footer>` na página filha. O `base.html` já tem tudo isso.
 
 ---
 
-### 4. Regras de CSS
+### 3. Regras de CSS
 
 - CSS global → já está em `static/css/global.css` (não mexa)
 - CSS da sua página → coloca dentro do `{% block estilos %}`
@@ -96,7 +119,7 @@ padding: 20px;
 
 ---
 
-### 5. Links internos — sempre com url_for
+### 4. Links internos — sempre com url_for
 
 ```html
 <!-- ✅ Correto -->
@@ -108,15 +131,15 @@ padding: 20px;
 
 ---
 
-### 6. Commit e push
+### 5. Commit e push
 
 ```bash
 git add templates/nome-da-sua-pagina.html
-git commit -m "feat: cria página sobre"
+git commit -m "feat: descrição do que você fez"
 git push origin main
 ```
 
-> ⚠️ Use `git add` apenas no SEU arquivo.
+> ⚠️ Use `git add` apenas no SEU arquivo para evitar subir mudanças de outros por engano.
 
 ---
 
@@ -129,6 +152,8 @@ git push origin main
 | Usar `href="/sobre"` em vez de `url_for` | Pode quebrar com mudança de host | Sempre use `url_for('nome_da_rota')` |
 | Editar o `base.html` sem avisar | Quebra TODAS as páginas do grupo | Fale com o grupo antes |
 | Commitar sem `git pull` antes | Gera conflito | Sempre `git pull` antes de começar |
+| Escrever categoria diferente no JSON | Filtro não funciona | Copie o nome exato da lista de categorias |
+| Colocar produtos dentro do `app.py` | Volta para dívida técnica | Sempre edite o `products.json` |
 
 ---
 
@@ -137,7 +162,6 @@ git push origin main
 ```
 inicio    → url_for('inicio')
 sobre     → url_for('sobre')
-produtos  → url_for('produtos')
 catalogo  → url_for('catalogo')
 contato   → url_for('contato')
 ```
@@ -146,7 +170,6 @@ contato   → url_for('contato')
 
 ## 💡 Dúvidas?
 
-Olhe o arquivo `templates/contato.html` — ele já está pronto e segue todos os padrões.
-Use como referência de como estruturar a sua página.
+Olhe o arquivo `templates/contato.html` — ele já está pronto e segue todos os padrões. Use como referência.
 
 Repositório: https://github.com/pedrosantos11-ads/ProjetoExtensionistaEnCasaLimpeza
