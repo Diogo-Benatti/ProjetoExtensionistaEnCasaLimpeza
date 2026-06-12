@@ -2,6 +2,7 @@ import os
 import json
 import re
 from pathlib import Path
+from threading import Thread
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mail import Mail, Message
@@ -66,6 +67,14 @@ def validar_formulario_contato(dados):
         erros.append('Mensagem deve ter no máximo 2000 caracteres.')
 
     return erros
+
+
+def enviar_email_async(app_ctx, msg):
+    with app_ctx.app_context():
+        try:
+            mail.send(msg)
+        except Exception as e:
+            print(f"Erro ao enviar e-mail: {e}")
 
 
 @app.route('/')
@@ -145,7 +154,7 @@ def contato():
                 recipients=[destinatario],
                 body=corpo
             )
-            mail.send(msg)
+            Thread(target=enviar_email_async, args=(app, msg)).start()
             flash('Mensagem enviada com sucesso!', 'sucesso')
             return redirect(url_for('contato'))
         except Exception:
